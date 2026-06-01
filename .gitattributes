@@ -1,0 +1,5 @@
+* text=auto
+install.sh text eol=lf
+bin/install.js text eol=lf
+src/pmem_agent/cli.py text eol=lf
+lib/pmem.py text eol=lf
