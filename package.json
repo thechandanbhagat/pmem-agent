@@ -1,0 +1,23 @@
+{
+  "name": "pmem-agent",
+  "version": "1.0.0",
+  "description": "Persistent, concurrent-safe project memory for Claude Code agents",
+  "keywords": ["claude", "claude-code", "ai", "agent", "memory"],
+  "homepage": "https://github.com/thechandanbhagat/pmem-agent",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thechandanbhagat/pmem-agent.git"
+  },
+  "license": "MIT",
+  "bin": {
+    "pmem-agent": "./bin/install.js"
+  },
+  "files": [
+    "bin/install.js",
+    "lib/pmem.py",
+    "lib/project-memory.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  }
+}

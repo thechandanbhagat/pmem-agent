@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pmem-agent"
+version = "1.0.0"
+description = "Persistent, concurrent-safe project memory for Claude Code agents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["claude", "claude-code", "ai", "agent", "memory"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.scripts]
+pmem = "pmem_agent.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/thechandanbhagat/pmem-agent"
+Repository = "https://github.com/thechandanbhagat/pmem-agent"
+Issues = "https://github.com/thechandanbhagat/pmem-agent/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pmem_agent"]
