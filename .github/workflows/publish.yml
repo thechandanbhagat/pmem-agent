@@ -1,0 +1,61 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # ── PyPI — OIDC trusted publishing (no token stored in secrets) ────────────
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    environment: release          # GitHub environment with optional approval gates
+    permissions:
+      id-token: write             # required for OIDC — grants PyPI the repo identity
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Stamp version from release tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          sed -i "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
+          sed -i "s/__version__ = .*/__version__ = \"$VERSION\"/" src/pmem_agent/__init__.py
+          echo "Publishing version $VERSION"
+
+      - name: Build
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No username/password needed — PyPI trusts this workflow via OIDC
+
+  # ── npm — token stored as GitHub secret NPM_TOKEN ─────────────────────────
+  publish-npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Stamp version from release tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" package.json
+          echo "Publishing version $VERSION"
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
